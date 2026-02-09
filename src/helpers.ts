@@ -1,5 +1,5 @@
 import { Reducer, Store } from "./types/core"
-import { StoreEnhancer, Middleware, InferDispatchExtensionsFromMiddlewareArray, UnkownDispatch, ExtractDispatchExtensions } from "./types/helpers"
+import { StoreEnhancer, Middleware, InferDispatchExtensionsFromMiddlewareArray } from "./types/helpers"
 
 /**
  * Combine multiple reducers into a single root reducer.
@@ -19,16 +19,18 @@ export function combineReducers<S extends Record<string, unknown>>(
     }, {} as Record<string, unknown>) as S
 }
 
-export function applyMiddleware<S, A extends Middleware[]>(middlewares: A): StoreEnhancer<S, {
-    dispatch: ExtractDispatchExtensions<A>
+export function applyMiddleware<S, A extends ReadonlyArray<Middleware>>(middlewares: A): StoreEnhancer<S, {
+    dispatch: InferDispatchExtensionsFromMiddlewareArray<A>
 }> {
     return (storeCreator) => (reducer, intialState) => {
-        const store = storeCreator(reducer, intialState)
-        middlewares.reverse().forEach(middleware => {
+        const store = storeCreator(reducer, intialState) as Store<S> & {
+    dispatch: InferDispatchExtensionsFromMiddlewareArray<A>
+}
+        middlewares.concat().reverse().forEach(middleware => {
             store.dispatch = middleware(store)(store.dispatch)
         })
-        return store as Store<S & {
-    dispatch: ExtractDispatchExtensions<A>
-}>
+        return store as Store<S> & {
+    dispatch: InferDispatchExtensionsFromMiddlewareArray<A>
+}
     }
 }

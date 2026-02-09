@@ -1,7 +1,7 @@
 {
-  "name": "@kashcodes/reduxish",
-  "version": "0.1.0",
-  "description": "A tiny, fully-typed Redux-inspired state management library with middleware and React bindings.",
+  "name": "@kashcode/reduxish",
+  "version": "0.2.0",
+  "description": "A tiny, fully-typed Redux-inspired state management library with store enhancement/plugin support for functionality such as thunking, logging, etc with full type inference on the enhanced store. Complies with flux architecture and fully compatible with react-redux bindings.",
   "type": "module",
   "main": "dist/index.js",
   "exports": {
@@ -18,7 +18,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/kasopej/reduxish"
+    "url": "git+https://github.com/kasopej/reduxish.git"
   },
   "bugs": {
     "url": "https://github.com/kasopej/reduxish/issues"

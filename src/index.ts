@@ -2,7 +2,7 @@ import { Reducer, Store, StoreSubscriber } from "./types/core";
 import deepFreeze from "deep-freeze"
 import type { StoreEnhancer } from "./types/helpers";
 
-function createStore<S, Ext = {}>(reducer: Reducer<S>, intialState?: S, storeEnhancer?: StoreEnhancer<S, Ext>): Store<S & Ext> {
+function createStore<S, Ext = {}>(reducer: Reducer<S>, intialState?: S, storeEnhancer?: StoreEnhancer<S, Ext>): Store<S> & Ext {
     let state = intialState
     const subscribers: StoreSubscriber[] = []
     const storeCreator = {
@@ -20,7 +20,7 @@ function createStore<S, Ext = {}>(reducer: Reducer<S>, intialState?: S, storeEnh
                 subscribers.filter(sub => subscribtionRequests.every((subRequest) => subRequest !== sub))
             }
         },
-    } as Store<S & Ext>
+    } as Store<S> & Ext
     return storeEnhancer ? storeEnhancer(createStore)(reducer, intialState) : storeCreator
 }
 

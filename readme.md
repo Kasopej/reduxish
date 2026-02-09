@@ -1,13 +1,6 @@
-# 🧃 Tiny State, Big Vibes
+# 🧃 Reduxish
 
-A **custom, fully‑typed, Redux‑ish state management library** for people who like their global state **predictable**, **type‑safe**, and **a little bit fun**.
-
-Think Redux, but:
-
-- smaller
-- friendlier
-- aggressively typed
-- and not afraid to smile
+A tiny, fully-typed Redux-inspired state management library with **store enhancement/plugin support for functionality such as thunking, logging, etc with full type inference on the enhanced store.** Complies with flux architecture and fully compatible with react-redux bindings.
 
 ---
 
@@ -17,23 +10,10 @@ Think Redux, but:
 
 Create a store with a **strongly‑typed state**, a **typed dispatch**, and a **simple subscription model**.
 
-- `dispatch(action)` – sends actions through reducers & middleware
-- `subscribe(listener)` – react to state changes
-- `getState()` – read the current state safely
-
-All fully inferred from your reducers. No `any`. No guessing.
-
----
-
-### 🧩 Combine Reducers
-
+#### 🧩 Combine Reducers
 Split your state into logical slices and merge them into a single root reducer.
+- Store root state shape is automatically inferred from slices
 
-- Each reducer owns its slice
-- State shape is automatically inferred
-- Action unions flow through cleanly
-
-Your root state type is built for you. Like magic, but TypeScript.
 
 ---
 
@@ -44,43 +24,51 @@ Intercept actions before they hit your reducers.
 Perfect for:
 
 - logging
-- async flows
+- thunking/async flows
 - side‑effects
 - analytics
-- chaos (controlled chaos)
 
 Middlewares are:
 
 - composable
-- ordered
-- fully typed from `dispatch` to `next`
+- fully typed
+
+Use ```applyMiddleware``` utility to compose middlewares. This utility also infers the dispatch extensions applied by the middleware via ```InferDispatchExtensionsFromMiddlewareArray``` recursive helper type (caveat: middlewares should be defined as a tuple for inference to work)
+
+##### Create store example with sotre enhancment/middelware support:
+```
+const middlewares = [resolveMiddleware, loggerMiddleware] as const;
+const store = createStore(
+  todoApp,
+  {
+    todos: []
+  },
+  applyMiddleware(middlewares),
+);
+```
 
 ---
 
-### ⚛️ React Integration Utilities
+### ⚛️ Using with React?
 
-Opt‑in React bindings for modern React apps.
+Continue using your usual react-redux hook bindings, no changes required!
 
-Includes helpers for:
-
-- subscribing components to store updates
-- selecting slices of state efficiently
-- avoiding unnecessary re‑renders
-
-Works great with function components, hooks, and strict mode.
-
-No class components were harmed in the making of this library.
-
+- useDispatch, useSelector all work out of the box
+- use typed versions of hooks by using our inferred types with react-redux "withTypes" utility
+  - i.e
+  ```
+    type AppDispatch = typeof store.dispatch
+    type RootState = ReturnType<typeof store.getState>
+    export const useAppDispatch = useDispatch.withTypes<AppDispatch>()
+    export const useAppSelector = useSelector.withTypes<RootState>()
+  ```
 ---
 
 ## 📦 Installation
 
 ```bash
-npm install tiny-state-big-vibes
+npm install @kashcode/reduxish
 ```
+---
 
-or if you’re feeling spicy:
-
-```bash
-pnpm add tiny-state-big-vibes
-```
+#### 📦 Note: this is a hobby project (not for production use). It is primarily to illustrate the simplicity of building a "redux" implementation from scratch
