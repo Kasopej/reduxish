@@ -1,0 +1,17 @@
+{
+    "exclude": [
+        "node_modules",
+        "./frontend",
+        "./dist",
+        "./src/tests"
+    ],
+    "compilerOptions": {
+        "outDir": "dist",
+        "lib": [
+            "ES2015"
+        ],
+        "esModuleInterop": true,
+        "strict": true,
+        "checkJs": true,
+    }
+}
