@@ -24,9 +24,7 @@
             "./src/types"
         ],
         "rootDir": "src",
-        "declarationMap": true,
         "stripInternal": true,
         "declaration": true,
-        "emitDeclarationOnly": false,
     }
 }
