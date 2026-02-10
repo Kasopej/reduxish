@@ -13,6 +13,7 @@ const config: Config = {
   collectCoverage: true,
   collectCoverageFrom: [
     'src/**/*.{ts,tsx}',
+    '!src/tests/**/*.{ts,tsx}',
     '!src/**/*.test.ts',
     '!src/**/*.spec.ts',
   ],

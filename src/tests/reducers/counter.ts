@@ -5,9 +5,9 @@ export type CounterAction =
 
 export function counterReducer(
   state = 0,
-  action: CounterAction,
+  action?: CounterAction,
 ): number {
-  switch (action.type) {
+  switch (action?.type) {
     case 'inc':
       return state + 1
     case 'dec':

@@ -1,13 +1,8 @@
-import { combineReducers } from '../../helpers'
+import combinedReducer from '../reducers/combined-reducer'
 
 describe('combineReducers', () => {
   it('combines multiple reducers with initial state correctly', () => {
-    const rootReducer = combineReducers({
-      a: (state: number = 0) => state + 1,
-      b: (state: string = 'x') => state + 'y',
-    })
-
-    const result = rootReducer({
+    const result = combinedReducer({
       a: 0,
       b: 'x',
     }, { type: 'ANY' })
@@ -19,12 +14,8 @@ describe('combineReducers', () => {
   })
 
     it('combines multiple reducers correctly', () => {
-    const rootReducer = combineReducers({
-      a: (state: number = 0) => state + 1,
-      b: (state: string = 'x') => state + 'y',
-    })
 
-    const result = rootReducer(undefined, { type: 'ANY' })
+    const result = combinedReducer(undefined, { type: 'ANY' })
 
     expect(result).toEqual({
       a: 1,

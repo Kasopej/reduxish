@@ -1,5 +1,8 @@
 import { createStore } from '../../index'
-import { applyMiddleware, combineReducers } from '../../helpers'
+import { applyMiddleware } from '../../helpers'
+import combinedReducer from '../reducers/combined-reducer'
+import { CounterAction, counterReducer } from '../reducers/counter'
+import { Todo, TodoAction, todosReducer } from '../reducers/todo-reducer'
 
 describe('applyMiddleware', () => {
   it('composes middleware in the correct order', () => {
@@ -19,13 +22,8 @@ describe('applyMiddleware', () => {
       return result
     }
 
-    const rootReducer = combineReducers({
-      a: (state: number = 0) => state + 1,
-      b: (state: string = 'x') => state + 'y',
-    })
-
     const store = createStore(
-      rootReducer,
+      combinedReducer,
       undefined,
       applyMiddleware([mw1, mw2]),
     )
@@ -41,32 +39,18 @@ describe('applyMiddleware', () => {
   })
 
   it('returns the updated state via getState after dispatch', () => {
-    type Action =
-      | { type: 'inc' }
-      | { type: 'add'; payload: number }
 
-    const reducer = (state = 0, action?: Action) => {
-      state = state ?? 0
-      switch (action?.type) {
-        case 'inc':
-          return state + 1
-        case 'add':
-          return state + action.payload
-        default:
-          return state
-      }
-    }
 
     const spyMiddleware =
       (store: { getState: () => number }) =>
         (next: any) =>
-          (action: Action) => {
+          (action: CounterAction) => {
             const result = next(action)
             return result
           }
 
     const store = createStore(
-      reducer,
+      counterReducer,
       0,
       applyMiddleware([spyMiddleware]),
     )
@@ -86,55 +70,14 @@ describe('applyMiddleware', () => {
   })
 
   it('handles array state (todos) with middleware and subscribers correctly', () => {
-  type Todo = {
-    id: number
-    text: string
-    completed: boolean
-  }
 
-  type Action =
-    | { type: 'todos/add'; payload: { id: number; text: string } }
-    | { type: 'todos/toggle'; payload: { id: number } }
-    | { type: 'todos/clearCompleted' }
-
-  const todosReducer = (
-    state: Todo[] = [],
-    action?: Action,
-  ): Todo[] => {
-    if (!action) return state
-
-    switch (action.type) {
-      case 'todos/add':
-        return [
-          ...state,
-          {
-            id: action.payload.id,
-            text: action.payload.text,
-            completed: false,
-          },
-        ]
-
-      case 'todos/toggle':
-        return state.map(todo =>
-          todo.id === action.payload.id
-            ? { ...todo, completed: !todo.completed }
-            : todo,
-        )
-
-      case 'todos/clearCompleted':
-        return state.filter(todo => !todo.completed)
-
-      default:
-        return state
-    }
-  }
 
   const statesSeen: Todo[][] = []
 
   const middleware =
     (store: { getState: () => Todo[] }) =>
     (next: any) =>
-    (action: Action) => {
+    (action: TodoAction) => {
       const prevState = store.getState()
       const result = next(action)
       const nextState = store.getState()
