@@ -1,6 +1,6 @@
 {
   "name": "@kashcode/reduxish",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "description": "A tiny, fully-typed Redux-inspired state management library with store enhancement/plugin support for functionality such as thunking, logging, etc with full type inference on the enhanced store. Complies with flux architecture and fully compatible with react-redux bindings.",
   "type": "module",
   "main": "dist/index.js",
