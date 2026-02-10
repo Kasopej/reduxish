@@ -16,6 +16,7 @@ export interface Store<S> {
     subscribe: (...subscribtionRequests: StoreSubscriber[]) => () => void
 }
 
+
 export interface Reducer<S, A extends UnknownAction = UnknownAction> {
-    (state: S, action?: A): S
+    (state: S | undefined, action?: A): S
 }

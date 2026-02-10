@@ -13,8 +13,8 @@ export function combineReducers<S extends Record<string, unknown>>(
             [K in keyof S]: Reducer<S[K]>
         }
 ): Reducer<S> {
-    return (state = {}, action) => (Object.entries(reducerMap)).reduce((partialState, [key, reducer]) => {
-        partialState[key] = reducer(state[key], action)
+    return (state, action) => (Object.entries(reducerMap)).reduce((partialState, [key, reducer]) => {
+        partialState[key] = reducer(state?.[key], action)
         return partialState
     }, {} as Record<string, unknown>) as S
 }

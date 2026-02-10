@@ -1,12 +1,12 @@
-import { Reducer, Store, StoreSubscriber } from "./types/core";
+import type { Reducer, Store, StoreSubscriber, UnknownAction } from "./types/core";
 import deepFreeze from "deep-freeze"
 import type { StoreEnhancer } from "./types/helpers";
 
-function createStore<S, Ext = {}>(reducer: Reducer<S>, intialState?: S, storeEnhancer?: StoreEnhancer<S, Ext>): Store<S> & Ext {
+function createStore<S, Ext = {}, A extends UnknownAction = UnknownAction>(reducer: Reducer<S, A>, intialState?: S, storeEnhancer?: StoreEnhancer<S, Ext>): Store<S> & Ext {
     let state = intialState
     const subscribers: StoreSubscriber[] = []
     const storeCreator = {
-        dispatch(action) {
+        dispatch<B extends A>(action: B) {
            state = reducer(typeof state === 'object' ? deepFreeze(state) as S: state as S, action)
            subscribers.forEach(sub => sub())
            return action
@@ -17,11 +17,11 @@ function createStore<S, Ext = {}>(reducer: Reducer<S>, intialState?: S, storeEnh
         subscribe(...subscribtionRequests) {
             subscribers.push(...subscribtionRequests)
             return () => {
-                subscribers.filter(sub => subscribtionRequests.every((subRequest) => subRequest !== sub))
+                subscribers.splice(subscribers.length - subscribtionRequests.length, subscribtionRequests.length)
             }
         },
     } as Store<S> & Ext
-    return storeEnhancer ? storeEnhancer(createStore)(reducer, intialState) : storeCreator
+    return storeEnhancer ? storeEnhancer(createStore)(reducer as any, intialState) : storeCreator
 }
 
 export {createStore}
