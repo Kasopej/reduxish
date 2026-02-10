@@ -1,6 +1,6 @@
 {
   "name": "@kashcode/reduxish",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "A tiny, fully-typed Redux-inspired state management library with store enhancement/plugin support for functionality such as thunking, logging, etc with full type inference on the enhanced store. Complies with flux architecture and fully compatible with react-redux bindings.",
   "type": "module",
   "main": "dist/index.js",
@@ -36,8 +36,7 @@
     "middleware"
   ],
   "dependencies": {
-    "deep-freeze": "^0.0.1",
-    "expect": "^22.4.3"
+    "deep-freeze": "^0.0.1"
   },
   "devDependencies": {
     "@types/deep-freeze": "^0.1.5",
