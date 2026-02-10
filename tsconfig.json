@@ -6,7 +6,8 @@
         "src/tests"
     ],
     "include": [
-        "src"
+            "src/**/*.ts",
+            "src/**/*.d.ts"
     ],
     "compilerOptions": {
         "outDir": "dist",
@@ -16,5 +17,14 @@
         "esModuleInterop": true,
         "strict": true,
         "checkJs": true,
+        "typeRoots": [
+            "./node_modules/@types",
+            "./src/types"
+        ],
+        "rootDir": "src",
+        "declarationMap": true,
+        "stripInternal": true,
+        "declaration": true,
+        "emitDeclarationOnly": false,
     }
 }

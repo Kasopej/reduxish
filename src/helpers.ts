@@ -1,5 +1,5 @@
-import { Reducer, Store } from "./types/core"
-import { StoreEnhancer, Middleware, InferDispatchExtensionsFromMiddlewareArray } from "./types/helpers"
+import type { Reducer, Store } from "./types/core"
+import type { StoreEnhancer, Middleware, InferDispatchExtensionsFromMiddlewareArray } from "./types/helpers"
 
 /**
  * Combine multiple reducers into a single root reducer.
